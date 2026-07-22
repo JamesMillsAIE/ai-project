@@ -43,7 +43,7 @@ target_link_libraries(AIGame
 )
 
 target_include_directories(AIGame
-    PUBLIC "source"
+    PUBLIC "include"
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 )
 

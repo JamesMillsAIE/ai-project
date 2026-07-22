@@ -1,4 +1,7 @@
+#include "Application.h"
+
 int main()
 {
-	return 0;
+	Application app = { 1080, 720, "AI Demonstration", RAYWHITE };
+	return app.Run();
 }
