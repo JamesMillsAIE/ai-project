@@ -17,5 +17,8 @@ public:
 
 public:
 	void Tick(float dt);
+	void Render();
+
+	[[nodiscard]] PhysicsWorld* GetPhysicsWorld() const;
 
 };

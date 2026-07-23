@@ -16,6 +16,7 @@ private:
 	int32 m_height;
 	string m_title;
 	Color m_clearColor;
+	Camera3D m_camera;
 
 	IWorld* m_world;
 
