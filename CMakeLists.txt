@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(dungeon_generator)
+project(ai_game)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,15 +31,23 @@ FetchContent_Declare(
     GIT_TAG 6.0
 )
 
+FetchContent_Declare(
+    box3d
+    GIT_REPOSITORY https://github.com/erincatto/box3d.git
+    GIT_TAG v0.1.0
+)
+
 SET(GLM_TEST_ENABLE OFF CACHE BOOL "GLM Build unit tests")
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build shared libraries" FORCE)
 
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(raylib)
+FetchContent_MakeAvailable(box3d)
 
 target_link_libraries(AIGame
     PUBLIC glm::glm
     PUBLIC raylib
+    PUBLIC box3d
 )
 
 target_include_directories(AIGame

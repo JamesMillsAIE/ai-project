@@ -5,6 +5,8 @@
 
 using std::string;
 
+class World;
+
 class Application
 {
 private:
@@ -12,6 +14,8 @@ private:
 	int m_height;
 	string m_title;
 	Color m_clearColor;
+
+	World* m_world;
 
 public:
 	Application(int w, int h, string  title, Color clrCol);
