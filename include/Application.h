@@ -3,26 +3,28 @@
 #include <raylib.h>
 #include <string>
 
+#include "Common.h"
+
 using std::string;
 
-class World;
+class IWorld;
 
 class Application
 {
 private:
-	int m_width;
-	int m_height;
+	int32 m_width;
+	int32 m_height;
 	string m_title;
 	Color m_clearColor;
 
-	World* m_world;
+	IWorld* m_world;
 
 public:
-	Application(int w, int h, string  title, Color clrCol);
+	Application(int32 w, int32 h, string  title, Color clrCol);
 	~Application();
 
 public:
-	int Run();
+	int32 Run();
 
 private:
 	void BeginPlay();

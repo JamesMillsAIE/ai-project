@@ -1,8 +1,8 @@
-﻿#include "PhysicsWorld.h"
+﻿#include "Gameplay/Worlds/PhysicsWorld.h"
 
 #include <box3d/box3d.h>
 
-PhysicsWorld::PhysicsWorld(const vec3 gravity, const float timeStep, const int subSteps)
+PhysicsWorld::PhysicsWorld(const vec3 gravity, const float timeStep, const int32 subSteps)
 	: m_gravity{ gravity }, m_world{  }, m_timeStep{ timeStep }, m_subSteps{ subSteps }
 {
 	b3WorldDef worldDef = {};

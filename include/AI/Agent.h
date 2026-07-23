@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Actor.h"
+#include "Gameplay/Actor.h"
 
 class IBehaviour;
 

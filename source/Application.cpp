@@ -3,9 +3,9 @@
 #include <utility>
 
 #include "Resources.h"
-#include "World.h"
+#include "Gameplay/Worlds/IWorld.h"
 
-Application::Application(const int w, const int h, string title, const Color clrCol)
+Application::Application(const int32 w, const int32 h, string title, const Color clrCol)
 	: m_width{ w }, m_height{ h }, m_title{ std::move(title) }, m_clearColor{ clrCol }, m_world{ nullptr }
 {
 	InitWindow(m_width, m_height, m_title.c_str());
@@ -17,7 +17,7 @@ Application::~Application()
 	CloseWindow();
 }
 
-int Application::Run()
+int32 Application::Run()
 {
 	if (!IsWindowReady())
 	{
@@ -45,7 +45,7 @@ int Application::Run()
 
 void Application::BeginPlay()
 {
-	m_world = new World;
+	m_world = new IWorld;
 }
 
 void Application::Tick(const float dt)
