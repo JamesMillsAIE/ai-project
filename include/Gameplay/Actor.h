@@ -21,7 +21,7 @@ private:
 	b3ShapeId m_physicsShape;
 	b3BoxHull m_hull; // TODO: Make this allow all hulls
 
-private:
+protected:
 	explicit Actor(IWorld* world);
 	virtual ~Actor() = default;
 

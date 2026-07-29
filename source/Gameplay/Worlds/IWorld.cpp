@@ -1,23 +1,14 @@
 ﻿#include "Gameplay/Worlds/IWorld.h"
 
+#include "AI/Agent.h"
 #include "Gameplay/Actor.h"
 #include "Gameplay/Worlds/PhysicsWorld.h"
 
 IWorld::IWorld()
 	: m_physics{ new PhysicsWorld }
 {
-	Actor* groundActor = new Actor{this};
-	groundActor->location = { 0.f, -10.f, 0.f };
-	groundActor->scale = { 100.f, 20.f, 100.f };
-	groundActor->CreatePhysicsBody(0.f, 0.f, b3_staticBody);
-	groundActor->color = RED;
-
-	Actor* cubeActor = new Actor{this};
-	cubeActor->location = { 0.f, 4.f, 0.f };
-	cubeActor->CreatePhysicsBody(1.f, .3f, b3_dynamicBody);
-
-	m_actors.Add(groundActor);
-	m_actors.Add(cubeActor);
+	Agent* agent = new Agent{ this };
+	m_actors.Add(agent);
 }
 
 IWorld::~IWorld()

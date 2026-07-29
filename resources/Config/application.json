@@ -29,5 +29,12 @@
     },
     "fovy": 90.0,
     "projection": 0
+  },
+  "debugger": {
+    "enableKey": 292,
+    "spheres": {
+      "slices": 18,
+      "rings": 5
+    }
   }
 }

@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "Debugger.h"
 #include "Resources.h"
 #include "Gameplay/Worlds/IWorld.h"
 #include "Utility/Config.h"
@@ -9,6 +10,8 @@
 Application::Application()
 	: m_world{ nullptr }, m_appConfig{ new Config{ "application" } }
 {
+	Debugger::Instance().Initialise(m_appConfig);
+
 	m_width = m_appConfig->Get<int32>("window.width");
 	m_height = m_appConfig->Get<int32>("window.height");
 	m_title = m_appConfig->Get<string>("window.title");
@@ -20,6 +23,8 @@ Application::Application()
 
 Application::~Application()
 {
+	delete m_appConfig;
+
 	Resources::GetInstance().Clear();
 	CloseWindow();
 }
@@ -35,6 +40,8 @@ int32 Application::Run()
 
 	while (!WindowShouldClose())
 	{
+		Debugger::Instance().TickEnabledFlag();
+
 		Tick(GetFrameTime());
 
 		BeginDrawing();

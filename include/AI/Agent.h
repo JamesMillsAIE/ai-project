@@ -6,15 +6,19 @@ class IBehaviour;
 
 class Agent final : public Actor
 {
+	friend IWorld;
+
 private:
 	IBehaviour* m_behaviour;
 
-public:
-	Agent();
+protected:
+	explicit Agent(IWorld* world);
 	~Agent() override;
 
 public:
 	void Tick(float dt) override;
 	void Render() override;
+
+	void SetBehaviour(IBehaviour* behaviour);
 
 };

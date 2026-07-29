@@ -11,8 +11,7 @@ void Actor::Tick(float dt) { }
 
 void Actor::Render()
 {
-	DrawCubeV(ToRaylib(location), ToRaylib(scale), color);
-	DrawCubeWiresV(ToRaylib(location), ToRaylib(scale), BLACK);
+
 }
 
 void Actor::CreatePhysicsBody(const float density, const float friction, const b3BodyType type)

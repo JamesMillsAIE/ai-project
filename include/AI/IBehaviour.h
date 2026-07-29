@@ -10,5 +10,6 @@ public:
 
 public:
 	virtual void Tick(float dt, Agent* agent) = 0;
+	virtual void Render(Agent* agent) {}
 
 };
