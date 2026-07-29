@@ -4,11 +4,17 @@
 
 #include <utility>
 
-PhysicsWorld::PhysicsWorld(const vec3 gravity, const float timeStep, const int32 subSteps)
-	: m_worldId{  }, m_gravity{ gravity }, m_timeStep{ timeStep }, m_subSteps{ subSteps }
+#include "Utility/Config.h"
+
+PhysicsWorld::PhysicsWorld()
+	: m_config{ new Config{ "physics" } }, m_worldId{  }
 {
+	m_gravity = ToGlm(m_config->Get<Vector3>("gravity"));
+	m_timeStep = m_config->Get<float>("simulation.timeStep");
+	m_subSteps = m_config->Get<int32>("simulation.substeps");
+
 	b3WorldDef worldDef = b3DefaultWorldDef();
-	worldDef.gravity = ToBox3d(gravity);
+	worldDef.gravity = ToBox3d(m_gravity);
 
 	m_worldId = b3CreateWorld(&worldDef);
 }

@@ -4,7 +4,7 @@
 #include "Gameplay/Worlds/PhysicsWorld.h"
 
 IWorld::IWorld()
-	: m_physics{ new PhysicsWorld{ { 0.f, -1.f, 0.f } } }
+	: m_physics{ new PhysicsWorld }
 {
 	Actor* groundActor = new Actor{this};
 	groundActor->location = { 0.f, -10.f, 0.f };

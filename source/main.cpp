@@ -2,6 +2,6 @@
 
 int32 main()
 {
-	Application app = { 1080, 720, "AI Demonstration", DARKGRAY };
+	Application app;
 	return app.Run();
 }

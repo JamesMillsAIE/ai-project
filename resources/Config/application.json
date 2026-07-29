@@ -1,0 +1,33 @@
+﻿{
+  "window":
+  {
+    "width": 1080,
+    "height": 720,
+    "title": "AI Demonstration",
+    "clrColor": {
+      "r": 80,
+      "g": 80,
+      "b": 80,
+      "a": 255
+    }
+  },
+  "camera": {
+    "position": {
+      "x": 0,
+      "y": 1,
+      "z": -10
+    },
+    "target": {
+      "x": 0,
+      "y": 1,
+      "z": -9
+    },
+    "up": {
+      "x": 0,
+      "y": 1,
+      "z": 0
+    },
+    "fovy": 90.0,
+    "projection": 0
+  }
+}

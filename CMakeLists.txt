@@ -42,6 +42,11 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/jhasse/poly2tri.git
     GIT_BRANCH master
 )
+FetchContent_Declare(
+        nlohmann_json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+        GIT_TAG v3.12.0
+)
 
 SET(GLM_TEST_ENABLE OFF CACHE BOOL "GLM Build unit tests")
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "Build shared libraries" FORCE)
@@ -50,12 +55,14 @@ FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(raylib)
 FetchContent_MakeAvailable(box3d)
 FetchContent_MakeAvailable(poly2tri)
+FetchContent_MakeAvailable(nlohmann_json)
 
 target_link_libraries(AIGame
     PUBLIC glm::glm
     PUBLIC raylib
     PUBLIC box3d
     PUBLIC poly2tri
+    PUBLIC nlohmann_json
 )
 
 target_include_directories(AIGame

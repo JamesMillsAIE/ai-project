@@ -4,14 +4,17 @@
 
 #include "Resources.h"
 #include "Gameplay/Worlds/IWorld.h"
+#include "Utility/Config.h"
 
-Application::Application(const int32 w, const int32 h, string title, const Color clrCol)
-	: m_width{ w }, m_height{ h }, m_title{ std::move(title) }, m_clearColor{ clrCol }, m_camera{
-		  .position   = { 0.f, 1.f, -10.f }, .target = { 0.f, 1.f, -9.f }, .up = { 0.f, 1.f, 0.f }, .fovy = 90.f,
-		  .projection = CAMERA_PERSPECTIVE
-	  },
-	  m_world{ nullptr }
+Application::Application()
+	: m_world{ nullptr }, m_appConfig{ new Config{ "application" } }
 {
+	m_width = m_appConfig->Get<int32>("window.width");
+	m_height = m_appConfig->Get<int32>("window.height");
+	m_title = m_appConfig->Get<string>("window.title");
+	m_clearColor = m_appConfig->Get<Color>("window.clrColor");
+	m_camera = m_appConfig->Get<Camera>("camera");
+
 	InitWindow(m_width, m_height, m_title.c_str());
 }
 

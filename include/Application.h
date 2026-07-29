@@ -7,6 +7,7 @@
 
 using std::string;
 
+class Config;
 class IWorld;
 
 class Application
@@ -19,9 +20,10 @@ private:
 	Camera3D m_camera;
 
 	IWorld* m_world;
+	Config* m_appConfig;
 
 public:
-	Application(int32 w, int32 h, string  title, Color clrCol);
+	Application();
 	~Application();
 
 public:

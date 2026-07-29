@@ -9,6 +9,8 @@
 
 using PhysicsSimulationCallback = std::function<void()>;
 
+class Config;
+
 class PhysicsWorld
 {
 	friend class IWorld;
@@ -21,6 +23,8 @@ private:
 	};
 
 private:
+	Config* m_config;
+
 	b3WorldId m_worldId;
 	vec3 m_gravity;
 
@@ -30,7 +34,7 @@ private:
 	TList<SimulatedActorBody> m_simulatedActorBodies;
 
 private:
-	explicit PhysicsWorld(vec3 gravity, float timeStep = 1.f / 60.f, int32 subSteps = 4);
+	PhysicsWorld();
 	~PhysicsWorld();
 
 public:
