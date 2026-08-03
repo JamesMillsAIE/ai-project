@@ -92,7 +92,7 @@ inline b3Quat ToBox3d(const quat quat)
     return { { quat.x, quat.y, quat.z }, quat.w };
 }
 
-inline glm::quat ToGlm(b3Quat quat)
+inline quat ToGlm(b3Quat quat)
 {
     return { quat.s, quat.v.x, quat.v.y, quat.v.z };
 }

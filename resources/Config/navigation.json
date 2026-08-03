@@ -1,0 +1,16 @@
+{
+  "agent_types": [
+    {
+      "id": "default",
+      "radius": 1.0,
+      "halfHeight": 0.9
+    }
+  ],
+  "areaTypes": [
+    {
+      "id": "default",
+      "walkable": true,
+      "cost": 1.0
+    }
+  ]
+}

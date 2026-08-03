@@ -29,10 +29,15 @@ void Agent::Render()
 		m_behaviour->Render(this);
 	}
 
-	Debugger::Instance().DrawDebugCapsule(location, { 0.f, 1.f, 0.f }, .9f, 1.f, RED);
+	Debugger::Instance().DrawDebugCapsule(location, { 0.f, 1.f, 0.f }, m_agentType.halfHeight, m_agentType.radius, RED);
 }
 
 void Agent::SetBehaviour(IBehaviour* behaviour)
 {
 	m_behaviour = behaviour;
+}
+
+void Agent::SetAgentType(const AgentType& agentType)
+{
+	m_agentType = agentType;
 }
