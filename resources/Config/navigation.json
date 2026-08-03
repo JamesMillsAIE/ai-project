@@ -1,5 +1,5 @@
 {
-  "agent_types": [
+  "agentTypes": [
     {
       "id": "default",
       "radius": 1.0,
