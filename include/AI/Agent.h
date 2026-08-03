@@ -2,8 +2,8 @@
 
 #include "Gameplay/Actor.h"
 
+class BrainComponent;
 struct AgentType;
-class IBehaviour;
 
 class Agent final : public Actor
 {
@@ -11,17 +11,13 @@ class Agent final : public Actor
 
 private:
 	AgentType* m_agentType;
-	IBehaviour* m_behaviour;
-
+	BrainComponent* m_brain;
+	
 protected:
 	explicit Agent(IWorld* world);
 	~Agent() override;
 
 public:
-	void Tick(float dt) override;
-	void Render() override;
-
-	void SetBehaviour(IBehaviour* behaviour);
 	void SetAgentType(AgentType* agentType);
 
 };

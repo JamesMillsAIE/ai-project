@@ -3,6 +3,7 @@
 #include "Debugger.h"
 #include "Resources.h"
 #include "Gameplay/Worlds/IWorld.h"
+#include "Gameplay/Worlds/MazeWorld.h"
 #include "Utility/Config.h"
 
 Application::Application()
@@ -72,7 +73,7 @@ int32 Application::Run()
 
 void Application::BeginPlay()
 {
-	m_world = new IWorld;
+	m_world = new MazeWorld;
 }
 
 void Application::Tick(const float dt)

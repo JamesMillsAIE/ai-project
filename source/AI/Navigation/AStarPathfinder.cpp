@@ -1,4 +1,4 @@
-﻿#include "AI/Pathfinding/AStarPathfinder.h"
+﻿#include "AI/Navigation/AStarPathfinder.h"
 
 #include <algorithm>
 #include <ranges>

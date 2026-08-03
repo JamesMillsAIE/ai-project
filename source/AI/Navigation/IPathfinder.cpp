@@ -1,4 +1,4 @@
-﻿#include "AI/Pathfinding/IPathfinder.h"
+﻿#include "AI/Navigation/IPathfinder.h"
 
 IPathfinder::Node::Node(const float cost, const vec3 location)
 	: hScore{ 0 }, gScore{ 0 }, previous{ nullptr }, cost{ cost }, location{ location }

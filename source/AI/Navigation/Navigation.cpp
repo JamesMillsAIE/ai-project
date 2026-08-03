@@ -1,4 +1,4 @@
-#include "AI/Pathfinding/Navigation.h"
+#include "AI/Navigation/Navigation.h"
 
 #include "Utility/Config.h"
 
