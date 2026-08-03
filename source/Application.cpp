@@ -1,7 +1,5 @@
 ﻿#include "Application.h"
 
-#include <utility>
-
 #include "Debugger.h"
 #include "Resources.h"
 #include "Gameplay/Worlds/IWorld.h"
@@ -83,12 +81,12 @@ void Application::Tick(const float dt)
 	m_world->Tick(dt);
 }
 
-void Application::Render()
+void Application::Render() const
 {
 	m_world->Render();
 }
 
-void Application::EndPlay()
+void Application::EndPlay() const
 {
 	delete m_world;
 }

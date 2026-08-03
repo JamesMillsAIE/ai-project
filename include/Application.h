@@ -33,8 +33,8 @@ private:
 	void BeginPlay();
 
 	void Tick(float dt);
-	void Render();
+	void Render() const;
 
-	void EndPlay();
+	void EndPlay() const;
 
 };
