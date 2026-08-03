@@ -11,9 +11,9 @@ float IPathfinder::Node::FScore() const
 	return hScore + gScore;
 }
 
-void IPathfinder::Node::Connect(Node* endpoint, float c)
+void IPathfinder::Node::Connect(Node* endpoint, const float c)
 {
-	connections.emplace_back(endpoint, c);
+	connections.Add({ .endpoint = endpoint, .cost = c });
 }
 
 bool IPathfinder::NodeComparer::operator()(const Node* lhs, const Node* rhs) const

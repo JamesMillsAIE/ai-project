@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Maths.h"
+#include "Utility/Collections/TList.h"
 
 using std::vector;
 
@@ -27,7 +28,7 @@ public:
 		float cost;
 		vec3 location;
 
-		vector<Edge> connections;
+		TList<Edge> connections;
 
 	public:
 		Node(float cost, vec3 location);
@@ -48,12 +49,10 @@ public:
 	virtual ~IPathfinder() = default;
 
 public:
-	virtual vector<vec3> Calculate(vec3 start, vec3 end) = 0;
+	virtual TList<vec3> Calculate(vec3 start, vec3 end) = 0;
 
 protected:
 	[[nodiscard]] virtual Node* GetClosestNode(vec3 point) const;
-
-private:
-	[[nodiscard]] virtual vector<Node*> GetNodes() const = 0;
+	[[nodiscard]] virtual TList<Node*> GetNodes() const = 0;
 
 };

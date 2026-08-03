@@ -24,7 +24,7 @@ AStarPathfinder::AStarPathfinder()
 AStarPathfinder::AStarPathfinder(Heuristic heuristic)
 	: m_heuristic{ std::move(heuristic) } { }
 
-AStarPathfinder::AStarPathfinder(Heuristic heuristic, const vector<Node*>& nodes)
+AStarPathfinder::AStarPathfinder(Heuristic heuristic, const TList<Node*>& nodes)
 	: m_nodes{ nodes }, m_heuristic{ std::move(heuristic) } { }
 
 AStarPathfinder::~AStarPathfinder()
@@ -34,10 +34,10 @@ AStarPathfinder::~AStarPathfinder()
 		delete node;
 	}
 
-	m_nodes.clear();
+	m_nodes.Clear();
 }
 
-vector<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
+TList<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 {
 	// Get the start and end nodes
 	Node* startNode = GetClosestNode(start),* endNode = GetClosestNode(end);
@@ -62,14 +62,14 @@ vector<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 	endNode->previous = nullptr;
 
 	set<Node*, NodeComparer> openList = { startNode };
-	vector<Node*> closedList;
+	TList<Node*> closedList;
 
 	while (!openList.empty())
 	{
 		// Move the first node in the open list to the closed list
 		Node* current = *openList.begin();
 		openList.erase(openList.begin());
-		closedList.emplace_back(current);
+		closedList.Add(current);
 
 		// We found a valid path
 		if (current == endNode)
@@ -107,10 +107,10 @@ vector<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 
 	// Calculate the path in reverse
 	Node* current = endNode;
-	vector<vec3> path;
+	TList<vec3> path;
 	while (current != nullptr)
 	{
-		path.emplace_back(current->location);
+		path.Add(current->location);
 		current = current->previous;
 	}
 
@@ -121,10 +121,10 @@ vector<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 
 void AStarPathfinder::AddNode(Node* node)
 {
-	m_nodes.emplace_back(node);
+	m_nodes.Add(node);
 }
 
-vector<IPathfinder::Node*> AStarPathfinder::GetNodes() const
+TList<IPathfinder::Node*> AStarPathfinder::GetNodes() const
 {
 	return m_nodes;
 }

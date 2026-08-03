@@ -10,7 +10,7 @@
     {
       "id": "default",
       "walkable": true,
-      "cost": 1.0
+      "costModifier": 1.0
     }
   ]
 }

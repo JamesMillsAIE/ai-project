@@ -20,9 +20,9 @@ struct WindowParams
 	bool alwaysRun;
 	bool fullscreen;
 	Color clearColor;
-};
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(WindowParams, width, height, title, resizable, alwaysRun, fullscreen, clearColor)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(WindowParams, width, height, title, resizable, alwaysRun, fullscreen, clearColor)
+};
 
 class Application
 {
