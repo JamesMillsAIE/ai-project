@@ -85,7 +85,7 @@ void Application::Tick(const float dt)
 	{
 		ShowCursor();
 	}
-
+	
 	if (IsCursorHidden())
 	{
 		UpdateCamera(&m_camera, CAMERA_FREE);
