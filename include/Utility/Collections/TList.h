@@ -158,33 +158,33 @@ TList<T, GROWTH>::Iterator::Iterator(pointer ptr)
 	: m_ptr{ ptr } { }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator::reference TList<T, GROWTH>::Iterator::operator*() const
+typename TList<T, GROWTH>::Iterator::reference TList<T, GROWTH>::Iterator::operator*() const
 {
 	return *m_ptr;
 }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator::pointer TList<T, GROWTH>::Iterator::operator->()
+typename TList<T, GROWTH>::Iterator::pointer TList<T, GROWTH>::Iterator::operator->()
 {
 	return m_ptr;
 }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator& TList<T, GROWTH>::Iterator::operator++()
+typename TList<T, GROWTH>::Iterator& TList<T, GROWTH>::Iterator::operator++()
 {
 	++m_ptr;
 	return *this;
 }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator& TList<T, GROWTH>::Iterator::operator--()
+typename TList<T, GROWTH>::Iterator& TList<T, GROWTH>::Iterator::operator--()
 {
 	--m_ptr;
 	return *this;
 }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator TList<T, GROWTH>::Iterator::operator++(int)
+typename TList<T, GROWTH>::Iterator TList<T, GROWTH>::Iterator::operator++(int)
 {
 	Iterator tmp = *this;
 	++(*this);
@@ -192,7 +192,7 @@ TList<T, GROWTH>::Iterator TList<T, GROWTH>::Iterator::operator++(int)
 }
 
 template<typename T, int64 GROWTH>
-TList<T, GROWTH>::Iterator TList<T, GROWTH>::Iterator::operator--(int)
+typename TList<T, GROWTH>::Iterator TList<T, GROWTH>::Iterator::operator--(int)
 {
 	Iterator tmp = *this;
 	--(*this);

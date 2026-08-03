@@ -1,10 +1,12 @@
 ﻿{
-  "window":
-  {
+  "window": {
     "width": 1080,
     "height": 720,
     "title": "AI Demonstration",
-    "clrColor": {
+    "resizable": true,
+    "alwaysRun": false,
+    "fullscreen": false,
+    "clearColor": {
       "r": 80,
       "g": 80,
       "b": 80,

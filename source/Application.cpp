@@ -10,13 +10,25 @@ Application::Application()
 {
 	Debugger::Instance().Initialise(m_appConfig);
 
-	m_width = m_appConfig->Get<int32>("window.width");
-	m_height = m_appConfig->Get<int32>("window.height");
-	m_title = m_appConfig->Get<string>("window.title");
-	m_clearColor = m_appConfig->Get<Color>("window.clrColor");
+	m_params = m_appConfig->Get<WindowParams>("window"); 
 	m_camera = m_appConfig->Get<Camera>("camera");
 
-	InitWindow(m_width, m_height, m_title.c_str());
+	uint32 flag = 0;
+
+	flag |= m_params.resizable ? FLAG_WINDOW_RESIZABLE : 0;
+	flag |= m_params.alwaysRun ? FLAG_WINDOW_ALWAYS_RUN : 0;
+	flag |= m_params.alwaysRun ? FLAG_FULLSCREEN_MODE : 0;
+
+	SetConfigFlags(flag);
+	InitWindow(m_params.width, m_params.height, m_params.title.c_str());
+
+	if (m_params.fullscreen)
+	{
+		const int monitor = GetCurrentMonitor();
+
+		SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
+		ToggleFullscreen();
+	}
 }
 
 Application::~Application()
@@ -43,7 +55,7 @@ int32 Application::Run()
 		Tick(GetFrameTime());
 
 		BeginDrawing();
-		ClearBackground(m_clearColor);
+		ClearBackground(m_params.clearColor);
 
 		BeginMode3D(m_camera);
 		Render();

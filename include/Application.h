@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include <string>
+#include <nlohmann/json.hpp>
 
 #include "Common.h"
 
@@ -10,13 +11,23 @@ using std::string;
 class Config;
 class IWorld;
 
+struct WindowParams
+{
+	int32 width;
+	int32 height;
+	string title;
+	bool resizable;
+	bool alwaysRun;
+	bool fullscreen;
+	Color clearColor;
+};
+
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(WindowParams, width, height, title, resizable, alwaysRun, fullscreen, clearColor)
+
 class Application
 {
 private:
-	int32 m_width;
-	int32 m_height;
-	string m_title;
-	Color m_clearColor;
+	WindowParams m_params;
 	Camera3D m_camera;
 
 	IWorld* m_world;
