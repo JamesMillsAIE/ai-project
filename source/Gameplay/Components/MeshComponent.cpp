@@ -7,15 +7,24 @@
 #include "Resources.h"
 #include "Gameplay/Actor.h"
 
-MeshComponent::MeshComponent(const string& meshPath)
-	: m_meshName{ meshPath }, m_mesh{ nullptr }, m_meshScale{ 1.f }
+MeshComponent::MeshComponent(string meshPath)
+	: m_meshName{ std::move(meshPath) }, m_mesh{ nullptr }, m_meshScale{ 1.f }
 {
 
 }
 
+MeshComponent::MeshComponent(Resource* mesh)
+	: m_mesh{ mesh }, m_meshScale{ 1.f }
+{
+	
+}
+
 void MeshComponent::BeginPlay()
 {
-	m_mesh = Resources::GetInstance().Get<Model>(m_meshName);
+	if (!m_meshName.empty())
+	{
+		m_mesh = Resources::GetInstance().Get<Model>(m_meshName);
+	}
 }
 
 void MeshComponent::Render()

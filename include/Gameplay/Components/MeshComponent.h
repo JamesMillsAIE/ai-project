@@ -16,7 +16,8 @@ protected:
 	float m_meshScale;
 
 public:
-	MeshComponent(const string& meshPath);
+	MeshComponent(string meshPath);
+	MeshComponent(Resource* mesh);
 
 public:
 	virtual void BeginPlay() override;

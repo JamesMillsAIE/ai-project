@@ -48,6 +48,7 @@ int32 Application::Run()
 		return EXIT_FAILURE;
 	}
 
+	SetTargetFPS(60);
 	BeginPlay();
 
 	while (!WindowShouldClose())
