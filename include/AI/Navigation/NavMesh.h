@@ -19,10 +19,10 @@ public:
 	class NavMeshNode final : public IPathfinder::Node
 	{
 	public:
-		vec3 verticies[3];
+		vec3 vertices[3];
 
 	public:
-		NavMeshNode(float c, vec3 loc);
+		NavMeshNode();
 		~NavMeshNode() override = default;
 
 	public:

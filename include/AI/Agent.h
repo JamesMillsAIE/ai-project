@@ -18,8 +18,7 @@ private:
 	BrainComponent* m_brain;
 	
 protected:
-	Agent(IWorld* world, const string& agentType = "default");
-	~Agent() override;
+	explicit Agent(IWorld* world);
 
 public:
 	void SetAgentType(AgentType* agentType);

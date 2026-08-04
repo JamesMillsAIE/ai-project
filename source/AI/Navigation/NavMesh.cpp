@@ -101,8 +101,8 @@ int32 NavMesh::StringPull(const vec3* portals, const int32 nPortals, vec3* point
 	return nPoints;
 }
 
-NavMesh::NavMeshNode::NavMeshNode(const float c, const vec3 loc)
-	: Node{ c, loc }, verticies{  }
+NavMesh::NavMeshNode::NavMeshNode()
+	: Node{ 0.f, {} }, vertices{  }
 {
 	
 }
@@ -110,9 +110,9 @@ NavMesh::NavMeshNode::NavMeshNode(const float c, const vec3 loc)
 int32 NavMesh::NavMeshNode::GetAdjacentVertices(NavMeshNode* other, vec3* adjacent)
 {
 	int count = 0;
-	for (vec3 vert : verticies)
+	for (vec3 vert : vertices)
 	{
-		for (vec3 vert2 : other->verticies)
+		for (vec3 vert2 : other->vertices)
 		{
 			if (vert == vert2)
 			{
@@ -171,18 +171,13 @@ void NavMesh::Build()
 		const Poly2Point* point2 = triangle->GetPoint(2);
 
 		// Generate the node
-		NavMeshNode* node = new NavMeshNode
-		{
-			.verticies =
-			{
-				{ static_cast<float>(point0->x), static_cast<float>(point0->y), 0.f },
-				{ static_cast<float>(point1->x), static_cast<float>(point1->y), 0.f },
-				{ static_cast<float>(point2->x), static_cast<float>(point2->y), 0.f },
-			}
-		};
+		NavMeshNode* node = new NavMeshNode;
+		node->vertices[0] = { static_cast<float>(point0->x), static_cast<float>(point0->y), 0.f };
+		node->vertices[1] = { static_cast<float>(point1->x), static_cast<float>(point1->y), 0.f };
+		node->vertices[2] = { static_cast<float>(point2->x), static_cast<float>(point2->y), 0.f };
 
 		// Generate the location and add it to the collection
-		node->location = (node->verticies[0] + node->verticies[1] + node->verticies[2]) / 3.f;
+		node->location = (node->vertices[0] + node->vertices[1] + node->vertices[2]) / 3.f;
 		nodes.Add(node);
 	}
 
@@ -253,10 +248,10 @@ TList<vec3> NavMesh::Calculate(const vec3 start, const vec3 end)
 			vec3 adj[2];
 			prev->GetAdjacentVertices(node, adj);
 
-			const vec2 fromPrev = node->location - prev->location;
-			const vec2 toAdj0 = adj[0] - prev->location;
+			const vec3 fromPrev = node->location - prev->location;
+			const vec3 toAdj0 = adj[0] - prev->location;
 
-			if (fromPrev.x * toAdj0.x - toAdj0.x * fromPrev.y <= 0)
+			if (fromPrev.x * toAdj0.x - toAdj0.y * fromPrev.y - toAdj0.z * fromPrev.z <= 0)
 			{
 				portals[index++] = adj[0];
 				portals[index++] = adj[1];

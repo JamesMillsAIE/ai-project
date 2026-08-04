@@ -4,8 +4,8 @@
 
 #include "Gameplay/Actor.h"
 
-AnimatedMeshComponent::AnimatedMeshComponent(const string& meshPath, const TList<string>& animationPaths)
-	: MeshComponent{ meshPath }, m_animationNames{ animationPaths }, m_activeAnimation{ 0 }, m_frame{ 0.f }
+AnimatedMeshComponent::AnimatedMeshComponent(const string& meshPath) :
+	MeshComponent{ meshPath }, m_animations{ nullptr }, m_activeAnimation{ 0 }, m_frame{ 0.f }
 {}
 
 void AnimatedMeshComponent::BeginPlay()
@@ -13,16 +13,7 @@ void AnimatedMeshComponent::BeginPlay()
 	MeshComponent::BeginPlay();
 
 	Resources& resources = Resources::GetInstance();
-
-	for (string& animationName : m_animationNames)
-	{
-		Resource* animation = resources.Get<ModelAnimation>(animationName);
-
-		if (animation != nullptr)
-		{
-			m_animations.Add(animation);
-		}
-	}
+	m_animations = resources.Get<ModelAnimation>(m_meshName);
 }
 
 void AnimatedMeshComponent::Tick(const float dt)
@@ -31,13 +22,13 @@ void AnimatedMeshComponent::Tick(const float dt)
 
 	m_frame += dt;
 
-	if (m_activeAnimation < m_animations.Count())
+	if (m_animations == nullptr)
 	{
-		const Resource* animation = m_animations[m_activeAnimation];
+		return;
+	}
 
-		for (int32 i = 0; i < animation->animationCount; ++i)
-		{
-			UpdateModelAnimation(static_cast<Model>(*m_mesh), animation->animations[i], m_frame);
-		}
+	if (m_activeAnimation < m_animations->animationCount)
+	{
+		UpdateModelAnimation(static_cast<Model>(*m_mesh), m_animations->animations[m_activeAnimation], m_frame);
 	}
 }
