@@ -8,7 +8,7 @@
 #include "Gameplay/Actor.h"
 
 MeshComponent::MeshComponent(const string& meshPath)
-	: m_meshName{ meshPath }, m_mesh{ nullptr }
+	: m_meshName{ meshPath }, m_mesh{ nullptr }, m_meshScale{ 1.f }
 {
 
 }
@@ -28,7 +28,12 @@ void MeshComponent::Render()
 
 		DrawModelEx(
 			static_cast<Model>(*m_mesh), ToRaylib(owner->location), ToRaylib(axis), glm::degrees(angle),
-			ToRaylib(owner->scale), WHITE
+			ToRaylib(owner->scale * m_meshScale), WHITE
 		);
 	}
+}
+
+void MeshComponent::SetMeshScale(const float scale)
+{
+	m_meshScale = scale;
 }

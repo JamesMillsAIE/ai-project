@@ -27,3 +27,23 @@ Navigation::~Navigation()
 {
 	delete m_config;
 }
+
+AgentType* Navigation::FindAgentType(const string& id)
+{
+	if (m_agentTypes.ContainsKey(id))
+	{
+		return &m_agentTypes[id];
+	}
+
+	return nullptr;
+}
+
+NavigationAreaType* Navigation::FindAreaType(const string& id)
+{
+	if (m_areaTypes.ContainsKey(id))
+	{
+		return &m_areaTypes[id];
+	}
+
+	return nullptr;
+}

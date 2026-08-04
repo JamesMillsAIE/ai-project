@@ -1,9 +1,13 @@
 ﻿#pragma once
 
+#include <string>
+
 #include "Gameplay/Actor.h"
 
 class BrainComponent;
 struct AgentType;
+
+using std::string;
 
 class Agent final : public Actor
 {
@@ -14,10 +18,11 @@ private:
 	BrainComponent* m_brain;
 	
 protected:
-	explicit Agent(IWorld* world);
+	Agent(IWorld* world, const string& agentType = "default");
 	~Agent() override;
 
 public:
 	void SetAgentType(AgentType* agentType);
+	[[nodiscard]] AgentType* GetAgentType() const;
 
 };

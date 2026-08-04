@@ -13,6 +13,7 @@ class MeshComponent : public IComponent
 protected:
 	string m_meshName;
 	Resource* m_mesh;
+	float m_meshScale;
 
 public:
 	MeshComponent(const string& meshPath);
@@ -20,5 +21,7 @@ public:
 public:
 	virtual void BeginPlay() override;
 	virtual void Render() override;
+
+	void SetMeshScale(float scale);
 
 };

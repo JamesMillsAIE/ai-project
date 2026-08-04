@@ -2,8 +2,8 @@
   "agentTypes": [
     {
       "id": "default",
-      "radius": 1.0,
-      "halfHeight": 0.9
+      "radius": 0.5,
+      "halfHeight": 0.45
     }
   ],
   "areaTypes": [

@@ -41,6 +41,7 @@ private:
 	~Navigation();
 
 public:
-
+	AgentType* FindAgentType(const string& id);
+	NavigationAreaType* FindAreaType(const string& id);
 
 };
