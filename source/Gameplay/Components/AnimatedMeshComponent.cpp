@@ -25,7 +25,7 @@ void AnimatedMeshComponent::BeginPlay()
 	}
 }
 
-void AnimatedMeshComponent::Tick(float dt)
+void AnimatedMeshComponent::Tick(const float dt)
 {
 	MeshComponent::Tick(dt);
 

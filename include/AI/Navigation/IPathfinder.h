@@ -10,7 +10,7 @@ using std::vector;
 class IPathfinder
 {
 public:
-	struct Node;
+	class Node;
 
 	struct Edge
 	{
@@ -18,7 +18,7 @@ public:
 		float cost;
 	};
 
-	struct Node
+	class Node
 	{
 	public:
 		float hScore;
@@ -32,6 +32,7 @@ public:
 
 	public:
 		Node(float cost, vec3 location);
+		virtual ~Node() = default;
 
 	public:
 		[[nodiscard]] float FScore() const;

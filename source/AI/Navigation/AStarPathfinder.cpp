@@ -9,12 +9,6 @@
 using std::runtime_error;
 using std::set;
 
-// Use a default "as the bird flies" heuristic
-float DefaultHeuristic(const AStarPathfinder::Node* current, const AStarPathfinder::Node* end)
-{
-	return glm::length(current->location - end->location);
-}
-
 AStarPathfinder::AStarPathfinder()
 	: m_heuristic{ DefaultHeuristic }
 {

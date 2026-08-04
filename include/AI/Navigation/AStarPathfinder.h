@@ -6,6 +6,12 @@
 
 using Heuristic = std::function<float(IPathfinder::Node*, IPathfinder::Node*)>;
 
+// Use a default "as the bird flies" heuristic
+inline float DefaultHeuristic(const IPathfinder::Node* current, const IPathfinder::Node* end)
+{
+	return glm::length(current->location - end->location);
+}
+
 class AStarPathfinder final : public IPathfinder
 {
 private:
@@ -14,7 +20,7 @@ private:
 
 public:
 	AStarPathfinder();
-	AStarPathfinder(Heuristic  heuristic);
+	AStarPathfinder(Heuristic heuristic);
 	AStarPathfinder(Heuristic heuristic, const TList<Node*>& nodes);
 
 	virtual ~AStarPathfinder() override;
