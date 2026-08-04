@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Common.h"
+
 using std::function;
 using std::string;
 using std::unordered_map;
@@ -23,41 +25,48 @@ struct Resource
 public:
 	string type;
 	Texture texture = { };
-	Image image     = { };
-	Sound sound     = { };
-	Music music     = { };
-	Model model     = { };
-	Font font       = { };
+	Image image = { };
+	Sound sound = { };
+	Music music = { };
+	Model model = { };
+	Font font = { };
+	ModelAnimation* animations = {};
+	int32 animationCount = 0;
 
 public:
-	operator Texture() const
+	explicit operator Texture() const
 	{
 		return texture;
 	}
 
-	operator Image() const
+	explicit operator Image() const
 	{
 		return image;
 	}
 
-	operator Sound() const
+	explicit operator Sound() const
 	{
 		return sound;
 	}
 
-	operator Music() const
+	explicit operator Music() const
 	{
 		return music;
 	}
 
-	operator Model() const
+	explicit operator Model() const
 	{
 		return model;
 	}
 
-	operator Font() const
+	explicit operator Font() const
 	{
 		return font;
+	}
+
+	explicit operator ModelAnimation*() const
+	{
+		return animations;
 	}
 };
 
@@ -79,28 +88,35 @@ private:
 	{
 		std::make_pair(typeid(Texture).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Texture).name(), .texture = LoadTexture(path) };
+			return {.type = typeid(Texture).name(), .texture = LoadTexture(path) };
 		}),
 		std::make_pair(typeid(Image).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Image).name(), .image = LoadImage(path) };
+			return {.type = typeid(Image).name(), .image = LoadImage(path) };
 		}),
 		std::make_pair(typeid(Sound).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Sound).name(), .sound = LoadSound(path) };
+			return {.type = typeid(Sound).name(), .sound = LoadSound(path) };
 		}),
 		std::make_pair(typeid(Music).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Music).name(), .music = LoadMusicStream(path) };
+			return {.type = typeid(Music).name(), .music = LoadMusicStream(path) };
 		}),
 		std::make_pair(typeid(Model).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Model).name(), .model = LoadModel(path) };
+			return {.type = typeid(Model).name(), .model = LoadModel(path) };
 		}),
 		std::make_pair(typeid(Font).name(), [](const char* path) -> Resource
 		{
-			return { .type = typeid(Font).name(), .font = LoadFont(path) };
+			return {.type = typeid(Font).name(), .font = LoadFont(path) };
 		}),
+		std::make_pair(typeid(ModelAnimation).name(), [](const char* path) -> Resource
+		{
+			int32 animationCount = 0;
+			ModelAnimation* animations = LoadModelAnimations(path, &animationCount);
+
+			return {.type = typeid(ModelAnimation).name(), .animations = animations, .animationCount = animationCount };
+		})
 	};
 
 	unordered_map<string, function<void(Resource)>> m_resourceDestroyers =
@@ -129,6 +145,10 @@ private:
 		{
 			UnloadFont(resource.font);
 		}),
+		std::make_pair(typeid(ModelAnimation).name(), [](const Resource& resource)
+		{
+			UnloadModelAnimations(resource.animations, resource.animationCount);
+		}),
 	};
 
 	unordered_map<string, vector<const char*>> m_resourceExtensions =
@@ -138,6 +158,7 @@ private:
 		std::make_pair(typeid(Sound).name(), vector{ "wav", "ogg", "mp3" }),
 		std::make_pair(typeid(Music).name(), vector{ "wav", "ogg", "mp3" }),
 		std::make_pair(typeid(Model).name(), vector{ "gltf", "glb", "obj" }),
+		std::make_pair(typeid(ModelAnimation).name(), vector{ "gltf", "glb", "obj" }),
 		std::make_pair(typeid(Font).name(), vector{ "ttf", "otf" }),
 	};
 
@@ -163,10 +184,11 @@ template<typename T>
 Resource* Resources::Get(const string& key)
 {
 	static_assert(
-	              std::is_same_v<T, Texture> || std::is_same_v<T, Image> || std::is_same_v<T, Sound> ||
-	              std::is_same_v<T, Music> || std::is_same_v<T, Model> || std::is_same_v<T, Font>,
-	              "T is not a Texture, Image, Sound, Music, Model or Font"
-	             );
+		std::is_same_v<T, Texture> || std::is_same_v<T, Image> || std::is_same_v<T, Sound> ||
+		std::is_same_v<T, Music> || std::is_same_v<T, Model> || std::is_same_v<T, Font> ||
+		std::is_same_v<T, ModelAnimation>,
+		"T is not a Texture, Image, Sound, Music, Model, Font or Animation"
+		);
 
 	// If the resource has already been loaded, we can just ignore it
 	if (m_resources.contains(key))
@@ -194,14 +216,14 @@ inline void Resources::Clear()
 inline bool Resources::TryLoadResource(const string& key, const char* id)
 {
 	return std::ranges::any_of(m_resourceExtensions[id], [this, key, id](const string& ext)
-	{
-		if (const path resPath = path("resources").append(key + "." + ext); std::filesystem::exists(resPath))
 		{
-			m_resources[key] = m_resourceCreators[id](resPath.string().c_str());
-			return true;
-		}
+			if (const path resPath = path("resources").append(key + "." + ext); std::filesystem::exists(resPath))
+			{
+				m_resources[key] = m_resourceCreators[id](resPath.string().c_str());
+				return true;
+			}
 
-		return false;
-	});
+			return false;
+		});
 }
 #endif

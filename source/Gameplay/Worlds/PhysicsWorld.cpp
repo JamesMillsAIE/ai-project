@@ -21,6 +21,8 @@ PhysicsWorld::PhysicsWorld()
 
 PhysicsWorld::~PhysicsWorld()
 {
+	delete m_config;
+
 	b3DestroyWorld(m_worldId);
 }
 
