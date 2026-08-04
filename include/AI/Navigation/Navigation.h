@@ -3,7 +3,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
-#include "Utility/Collections/TList.h"
+#include "Utility/Collections/TMap.h"
 
 class Config;
 
@@ -11,32 +11,36 @@ using std::string;
 
 struct AgentType
 {
-	string id = "default";
 	float radius = 1.f;
 	float halfHeight = 1.f;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(AgentType, id, radius, halfHeight)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(AgentType, radius, halfHeight)
 };
 
 struct NavigationAreaType
 {
-	string id = "default";
 	bool walkable = true;
 	float costModifier = 1.f;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(NavigationAreaType, id, walkable, costModifier)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(NavigationAreaType, walkable, costModifier)
 };
 
 class Navigation
 {
+public:
+	static Navigation& GetInstance();
+
 private:
 	Config* m_config;
 
-	TList<AgentType> m_agentTypes;
-	TList<NavigationAreaType> m_areaTypes;
+	TMap<string, AgentType> m_agentTypes;
+	TMap<string, NavigationAreaType> m_areaTypes;
 
-public:
+private:
 	Navigation();
 	~Navigation();
+
+public:
+
 
 };

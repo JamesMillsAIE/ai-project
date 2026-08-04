@@ -2,10 +2,28 @@
 
 #include "Utility/Config.h"
 
+Navigation& Navigation::GetInstance()
+{
+	static Navigation instance;
+
+	return instance;
+}
+
 Navigation::Navigation()
 	: m_config{ new Config{ "navigation" } }
 {
-	vector<AgentType> agentTypes = m_config->Get<vector<AgentType>>("agentTypes");
+	for (Json agentType : m_config->Get<Json>("agentTypes"))
+	{
+		m_agentTypes.Add(agentType["id"], agentType.get<AgentType>());
+	}
+
+	for (Json areaType : m_config->Get<Json>("areaTypes"))
+	{
+		m_areaTypes.Add(areaType["id"], areaType.get<NavigationAreaType>());
+	}
 }
 
-Navigation::~Navigation() {}
+Navigation::~Navigation()
+{
+	delete m_config;
+}

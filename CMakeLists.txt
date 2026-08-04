@@ -9,6 +9,7 @@ if (MSVC)
 endif()
 
 add_compile_definitions($<$<CONFIG:Debug>:_DEBUG>)
+add_compile_definitions($<$<CONFIG:Debug>:_CRTDBG_MAP_ALLOC>)
 
 file(
     GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
