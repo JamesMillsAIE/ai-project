@@ -26,7 +26,7 @@ public:
 	virtual ~AStarPathfinder() override;
 
 public:
-	virtual TList<vec3> Calculate(vec3 start, vec3 end) override;
+	virtual TList<Node*> Calculate(vec3 start, vec3 end) override;
 	void AddNode(Node* node);
 
 protected:

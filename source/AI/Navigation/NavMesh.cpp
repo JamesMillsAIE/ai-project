@@ -3,15 +3,111 @@
 #include "AI/Navigation/AStarPathfinder.h"
 #include "AI/Navigation/NavMeshObstacles.h"
 
+constexpr int32 MAX_SMOOTHED_PATH_NODES = 128;
+
 using p2t::Triangle;
 
-NavMesh::NavMeshNode::NavMeshNode(const float cost, const vec3 location)
-	: Node{ cost, location }, verticies{  }
+namespace
+{
+	float TriArea(const vec3 a, const vec3 b, const vec3 c)
+	{
+		const float ax = b[0] - a[0];
+		const float ay = b[1] - a[1];
+		const float bx = c[0] - a[0];
+		const float by = c[1] - a[1];
+		return bx * ay - ax * by;
+	}
+}
+
+int32 NavMesh::StringPull(const vec3* portals, const int32 nPortals, vec3* points, const int32 maxPoints)
+{
+	int nPoints = 0;
+
+	// Setup the initial state
+	vec3 portalApex = portals[0], portalLeft = portals[0], portalRight = portals[1];
+	int apexIndex = 0, leftIndex = 0, rightIndex = 0;
+
+	// Add the start point
+	points[nPoints++] = portalApex;
+
+	for (int i = 1; i < nPortals && nPortals < maxPoints; ++i)
+	{
+		vec3 left = portals[i * 2 + 0];
+		vec3 right = portals[i * 2 + 1];
+
+		// Update right vertex
+		if (TriArea(portalApex, portalRight, right) <= 0.f)
+		{
+			if (portalApex == portalRight || TriArea(portalApex, portalLeft, right) > 0.f)
+			{
+				// Tighten the funnel
+				portalRight = right;
+				rightIndex = i;
+			}
+			else
+			{
+				points[nPoints++] = portalLeft;
+
+				portalApex = portalLeft;
+				apexIndex = leftIndex;
+
+				// Reset portal
+				portalLeft = portalApex;
+				portalRight = portalApex;
+				leftIndex = apexIndex;
+				rightIndex = apexIndex;
+
+				// Restart scan
+				i = apexIndex;
+				continue;
+			}
+		}
+
+		// Update left vertex
+		if (TriArea(portalApex, portalLeft, left) >= 0.f)
+		{
+			if (portalApex == portalLeft || TriArea(portalApex, portalRight, left) < 0.f)
+			{
+				// Tighten the funnel
+				portalLeft = left;
+				leftIndex = i;
+			}
+			else
+			{
+				points[nPoints++] = portalRight;
+
+				// Make current right the new apex
+				portalApex = portalRight;
+				apexIndex = rightIndex;
+
+				// Reset portal
+				portalLeft = portalApex;
+				portalRight = portalApex;
+				leftIndex = apexIndex;
+				rightIndex = apexIndex;
+
+				// Restart scan
+				i = apexIndex;
+				continue;
+			}
+		}
+	}
+
+	if (nPoints < maxPoints)
+	{
+		points[nPoints] = portals[nPortals - 1];
+	}
+
+	return nPoints;
+}
+
+NavMesh::NavMeshNode::NavMeshNode(const float c, const vec3 loc)
+	: Node{ c, loc }, verticies{  }
 {
 	
 }
 
-int NavMesh::NavMeshNode::GetAdjacentVertices(NavMeshNode* other, vec3* adjacent)
+int32 NavMesh::NavMeshNode::GetAdjacentVertices(NavMeshNode* other, vec3* adjacent)
 {
 	int count = 0;
 	for (vec3 vert : verticies)
@@ -127,4 +223,70 @@ vector<Poly2Point*> NavMesh::PolyPoints() const
 	}
 
 	return points;
+}
+
+TList<vec3> NavMesh::Calculate(const vec3 start, const vec3 end)
+{
+	// If the nav mesh hasn't been built before, build it
+	if (m_pathfinder == nullptr)
+	{
+		Build();
+	}
+
+	// Use A* to calculate the the unsmoothed path
+	TList<IPathfinder::Node*> path = m_pathfinder->Calculate(start, end);
+
+	// Add the setup the portals with the start of the path
+	int index = 0;
+	vec3* portals = new vec3[(path.Count() + 1) * 2];
+	portals[index++] = path.Front()->location;
+	portals[index++] = path.Front()->location;
+
+	NavMeshNode* prev = nullptr;
+	for (IPathfinder::Node* n : path)
+	{
+		// If we have a previous node...
+		NavMeshNode* node = dynamic_cast<NavMeshNode*>(n);
+		if (prev != nullptr)
+		{
+			// Get the adjacent vertices and get the directions between them
+			vec3 adj[2];
+			prev->GetAdjacentVertices(node, adj);
+
+			const vec2 fromPrev = node->location - prev->location;
+			const vec2 toAdj0 = adj[0] - prev->location;
+
+			if (fromPrev.x * toAdj0.x - toAdj0.x * fromPrev.y <= 0)
+			{
+				portals[index++] = adj[0];
+				portals[index++] = adj[1];
+			}
+			else
+			{
+				portals[index++] = adj[1];
+				portals[index++] = adj[0];
+			}
+		}
+
+		prev = node;
+	}
+
+	// Add the last node to the portals
+	portals[index++] = path.Back()->location;
+	portals[index++] = path.Back()->location;
+
+	// String pull the portals to get the smoothed path
+	vec3 out[MAX_SMOOTHED_PATH_NODES];
+	const int32 count = StringPull(portals, index / 2, out, MAX_SMOOTHED_PATH_NODES);
+
+	// Convert the calculated string pull to the path list
+	TList<vec3> smoothPath;
+	smoothPath.Resize(count);
+
+	for (int32 i = 0; i < count; ++i)
+	{
+		smoothPath[i] = out[i];
+	}
+
+	return smoothPath;
 }

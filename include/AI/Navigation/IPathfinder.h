@@ -50,7 +50,7 @@ public:
 	virtual ~IPathfinder() = default;
 
 public:
-	virtual TList<vec3> Calculate(vec3 start, vec3 end) = 0;
+	virtual TList<Node*> Calculate(vec3 start, vec3 end) = 0;
 
 protected:
 	[[nodiscard]] virtual Node* GetClosestNode(vec3 point) const;

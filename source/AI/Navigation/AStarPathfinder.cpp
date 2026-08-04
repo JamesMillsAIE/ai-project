@@ -16,10 +16,12 @@ AStarPathfinder::AStarPathfinder()
 }
 
 AStarPathfinder::AStarPathfinder(Heuristic heuristic)
-	: m_heuristic{ std::move(heuristic) } { }
+	: m_heuristic{ std::move(heuristic) }
+{}
 
 AStarPathfinder::AStarPathfinder(Heuristic heuristic, const TList<Node*>& nodes)
-	: m_nodes{ nodes }, m_heuristic{ std::move(heuristic) } { }
+	: m_nodes{ nodes }, m_heuristic{ std::move(heuristic) }
+{}
 
 AStarPathfinder::~AStarPathfinder()
 {
@@ -31,10 +33,10 @@ AStarPathfinder::~AStarPathfinder()
 	m_nodes.Clear();
 }
 
-TList<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
+TList<IPathfinder::Node*> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 {
 	// Get the start and end nodes
-	Node* startNode = GetClosestNode(start),* endNode = GetClosestNode(end);
+	Node* startNode = GetClosestNode(start), * endNode = GetClosestNode(end);
 
 	// If either are nullptr, we have a problem
 	if (startNode == nullptr || endNode == nullptr)
@@ -49,10 +51,10 @@ TList<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 	}
 
 	// Reset the start and end node values
-	startNode->gScore   = startNode->hScore = 0;
+	startNode->gScore = startNode->hScore = 0;
 	startNode->previous = nullptr;
 
-	endNode->gScore   = endNode->hScore = 0;
+	endNode->gScore = endNode->hScore = 0;
 	endNode->previous = nullptr;
 
 	set<Node*, NodeComparer> openList = { startNode };
@@ -72,10 +74,10 @@ TList<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 		}
 
 		// Iterate over every connection with a node that isn't in the closed list
-		for (const auto [endpoint, cost] : current->connections | std::ranges::views::filter([closedList](const Edge e)
-		{
-			return std::ranges::find(closedList, e.endpoint) != closedList.end();
-		}))
+		for (const auto& [endpoint, cost] : current->connections | std::ranges::views::filter([closedList](const Edge e)
+			{
+				return std::ranges::find(closedList, e.endpoint) != closedList.end();
+			}))
 		{
 			const float gScore = current->gScore + cost;
 			const float hScore = m_heuristic(endpoint, endNode);
@@ -101,10 +103,10 @@ TList<vec3> AStarPathfinder::Calculate(const vec3 start, const vec3 end)
 
 	// Calculate the path in reverse
 	Node* current = endNode;
-	TList<vec3> path;
+	TList<Node*> path;
 	while (current != nullptr)
 	{
-		path.Add(current->location);
+		path.Add(current);
 		current = current->previous;
 	}
 
