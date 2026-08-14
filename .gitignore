@@ -1,0 +1,8 @@
+.vs/
+[Bb]uilds/
+[Ii]ntermediate/
+*.pdb
+*.user
+ai-components.idb
+ai-components.lib
+ai-components.pdb
