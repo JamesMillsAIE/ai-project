@@ -1,22 +1,16 @@
-#include <raylib/raylib.h>
+#include "Application.h"
+
+#if _DEBUG
+#include <crtdbg.h>
+#endif
+
+using AiForGames::Application;
 
 int main()
 {
-	Camera2D camera = {};
+#if _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
-	InitWindow(1080, 720, "Demonstration");
-
-	while (!WindowShouldClose())
-	{
-		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		BeginMode2D(camera);
-
-		EndMode2D();
-		EndDrawing();
-	}
-
-	CloseWindow();
-
-	return 0;
+	return Application().Run();
 }
