@@ -12,11 +12,8 @@ namespace
 
 namespace AiForGames
 {
-	Node::Node(Vector2 location)
-		: location{ location }
-	{
-
-	}
+	Node::Node(Vector2 location) :
+		location{location} {}
 
 	void Node::Connect(Node* endPoint, float c)
 	{
@@ -24,13 +21,13 @@ namespace AiForGames
 	}
 
 	NodeGraph::NodeGraph(const Image& nodeMap, const float nodeSpacing) :
-		m_width{ nodeMap.width }, m_height{ nodeMap.height }, m_nodeSpacing{ nodeSpacing },
-		m_nodeMapTex{ LoadTextureFromImage(nodeMap) }
+		m_width{nodeMap.width}, m_height{nodeMap.height}, m_nodeSpacing{nodeSpacing},
+		m_nodeMapTex{LoadTextureFromImage(nodeMap)}
 	{
-		m_graph = new Node * *[m_height];
+		m_graph = new Node* *[m_height];
 		for (int32_t y = 0; y < m_height; ++y)
 		{
-			m_graph[y] = new Node * [m_width];
+			m_graph[y] = new Node*[m_width];
 			for (int32_t x = 0; x < m_width; ++x)
 			{
 				const Color color = GetImageColor(nodeMap, x, y);
@@ -40,41 +37,41 @@ namespace AiForGames
 					.y = static_cast<float>(y) * nodeSpacing + nodeSpacing * .5f
 				};
 
-				m_graph[y][x] = CmpColor(color, { 255, 0, 0, 255 }) ? nullptr : new Node{ nodeLoc };
+				m_graph[y][x] = CmpColor(color, {255, 0, 0, 255}) ? nullptr : new Node{nodeLoc};
 			}
 		}
 
 		IterateGraph([this](Node* node, const int32_t x, const int32_t y)
+		{
+			if (Node* east = m_graph[y][x + 1])
 			{
-				if (Node* east = m_graph[y][x + 1])
-				{
-					node->Connect(east);
-					east->Connect(node);
-				}
+				node->Connect(east);
+				east->Connect(node);
+			}
 
-				if (Node* south = m_graph[y + 1][x])
-				{
-					node->Connect(south);
-					south->Connect(node);
-				}
+			if (Node* south = m_graph[y + 1][x])
+			{
+				node->Connect(south);
+				south->Connect(node);
+			}
 
-				if (Node* southEast = m_graph[y + 1][x + 1])
-				{
-					node->Connect(southEast);
-					southEast->Connect(node);
-				}
+			if (Node* southEast = m_graph[y + 1][x + 1])
+			{
+				node->Connect(southEast);
+				southEast->Connect(node);
+			}
 
-				if (x - 1 < 0)
-				{
-					return;
-				}
+			if (x - 1 < 0)
+			{
+				return;
+			}
 
-				if (Node* southWest = m_graph[y + 1][x - 1])
-				{
-					node->Connect(southWest);
-					southWest->Connect(node);
-				}
-			}, 1, 1);
+			if (Node* southWest = m_graph[y + 1][x - 1])
+			{
+				node->Connect(southWest);
+				southWest->Connect(node);
+			}
+		}, 1, 1);
 
 		UnloadImage(nodeMap);
 	}
@@ -104,18 +101,18 @@ namespace AiForGames
 		}
 
 		IterateGraph([this](const Node* node, int32_t x, int32_t y)
+		{
+			for (const auto [cost, endPoint] : node->edges)
 			{
-				for (const auto [cost, endPoint] : node->edges)
-				{
-					DrawLineV(node->location, endPoint->location, GRAY);
-				}
-			});
+				DrawLineV(node->location, endPoint->location, GRAY);
+			}
+		});
 
 		IterateGraph([this](const Node* node, int32_t x, int32_t y)
-			{
-				DrawCircleV(node->location, m_nodeSpacing * .25f, WHITE);
-				DrawCircleLinesV(node->location, m_nodeSpacing * .25f, GRAY);
-			});
+		{
+			DrawCircleV(node->location, m_nodeSpacing * .25f, WHITE);
+			DrawCircleLinesV(node->location, m_nodeSpacing * .25f, GRAY);
+		});
 	}
 
 	Node*** NodeGraph::Get() const
@@ -124,7 +121,7 @@ namespace AiForGames
 	}
 
 	void NodeGraph::IterateGraph(const function<void(Node*, int32_t, int32_t)>& iterator,
-		const int32_t offsetXMax, const int32_t offsetYMax) const
+	                             const int32_t offsetXMax, const int32_t offsetYMax) const
 	{
 		for (int32_t y = 0; y < m_height - offsetXMax; ++y)
 		{

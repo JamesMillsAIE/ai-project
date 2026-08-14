@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include <glm/glm.hpp>
 #include <cstdlib>
 #include <raylib/raylib.h>
 #include <raylib/raymath.h>
@@ -10,14 +11,15 @@
 namespace AiForGames
 {
 	Application::Application() :
-		m_width{ 1280 }, m_height{ 960 }, m_title{ "AI For Games - Demonstration" }
+		m_width{ 1280 }, m_height{ 960 }, m_title{ "AI For Games - Demonstration" }, m_cameraSpeed{ 150.f },
+		m_graph{ nullptr }
 	{
 		m_camera =
 		{
 			.offset = Vector2Zero(),
 			.target = Vector2Zero(),
 			.rotation = 0,
-			.zoom = 1.f
+			.zoom = 2.f
 		};
 	}
 
@@ -63,8 +65,21 @@ namespace AiForGames
 		m_graph = new NodeGraph{ LoadImage("Resources/node_map.png"), 32.f };
 	}
 
-	void Application::Tick(const float dt) const
+	void Application::Tick(const float dt)
 	{
+		const float maxX = static_cast<float>(m_width) - static_cast<float>(m_width) / m_camera.zoom;
+		const float maxY = static_cast<float>(m_height) - static_cast<float>(m_height) / m_camera.zoom;
+		const float cameraMoveSpeed = m_cameraSpeed * m_camera.zoom;
+
+		m_camera.target.x += dt * cameraMoveSpeed * static_cast<float>(IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
+		m_camera.target.y += dt * cameraMoveSpeed * static_cast<float>(IsKeyDown(KEY_S) - IsKeyDown(KEY_W));
+
+		m_camera.target.x = glm::clamp(m_camera.target.x, 0.f, maxX);
+		m_camera.target.y = glm::clamp(m_camera.target.y, 0.f, maxY);
+
+		m_camera.zoom += GetMouseWheelMove() * .1f;
+		m_camera.zoom = glm::clamp(m_camera.zoom, 1.f, 2.f);
+
 		for (Agent* agent : m_agents)
 		{
 			agent->Tick(dt);

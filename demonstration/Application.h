@@ -17,7 +17,9 @@ namespace AiForGames
 		int32_t m_width;
 		int32_t m_height;
 		const char* m_title;
+
 		Camera2D m_camera;
+		float m_cameraSpeed;
 
 		vector<Agent*> m_agents;
 		NodeGraph* m_graph;
@@ -31,7 +33,7 @@ namespace AiForGames
 	private:
 		void BeginPlay();
 
-		void Tick(float dt) const;
+		void Tick(float dt);
 		void Render() const;
 
 		void EndPlay() const;
